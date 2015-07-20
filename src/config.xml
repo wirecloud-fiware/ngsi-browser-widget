@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="CoNWeT" name="ngsi-browser" version="1.0.0">
+    <details>
+        <title>NGSI browser</title>
+        <email>wirecloud@conwet.com</email>
+        <image>images/catalogue.png</image>
+        <description>Browse available entities on a given Orio context broker server</description>
+        <longdescription>DESCRIPTION.md</longdescription>
+        <authors>Álvaro Arranz García &lt;aarranz@conwet.com&gt;</authors>
+    </details>
+
+    <requirements>
+        <feature name="NGSI"/>
+    </requirements>
+
+    <preferences>
+        <preference name="ngsi_server" type="text" label="NGSI server URL" description="URL of the Orion Context Broker to use for retrieving entity information" default="http://orion.lab.fiware.org:1026/"/>
+        <preference name="ngsi_proxy" type="text" label="NGSI proxy URL" description="URL of the Orion Context Broker proxy to use for receiving notifications about changes" default="https://ngsiproxy.lab.fiware.org"/>
+        <preference name="use_user_fiware_token" type="boolean" label="Use the FIWARE credentials of the user" description="Use the FIWARE credentials of the user logged into WireCloud. Take into account this option cannot be enabled if you want to use this widget in a public workspace as anonoymous users doesn't have a valid FIWARE auth token" default="true"/>
+        <preference name="ngsi_entities" type="text" label="NGSI entity types" description="A comma separated list of entity types to use for filtering entities from the Orion Context broker. Leave this field empty for no filtering by type." default=""/>
+        <preference name="ngsi_id_filter" type="text" label="Id pattern" description="Id pattern for filtering entities. This preference can be empty, in that case, entities won't be filtered by id." default=""/>
+        <preference name="extra_attributes" type="text" label="Extra Attributes" description="Comma separated list of attributes to be displayed in the widget as extra columns" default=""/>
+    </preferences>
+
+    <wiring>
+        <outputendpoint name="selection" label="Selection" type="text"/>
+    </wiring>
+
+    <contents src="index.html" useplatformstyle="true"/>
+    <rendering height="33%" width="33%"/>
+</widget>

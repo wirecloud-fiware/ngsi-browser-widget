@@ -1,0 +1,27 @@
+{
+  "vendor": "CoNWeT",
+  "name": "ngsi-browser",
+  "version": "1.0.0",
+  "description": "Browse available entities on a given Orio context broker server",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wirecloud-fiware/ngsi-browser-widget.git"
+  },
+  "author": "CoNWeT Lab., Universidad Politecnica de Madrid",
+  "license": "https://github.com/wirecloud-fiware/ngsi-browser-widget/blob/master/LICENSE",
+  "bugs": {
+    "url": "https://github.com/wirecloud-fiware/ngsi-browser-widget/issues"
+  },
+  "homepage": "https://github.com/wirecloud-fiware/ngsi-browser-widget",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-compress": "^0.12.0",
+    "grunt-contrib-copy": "^0.8.0",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-jscs": "^1.8.0",
+    "grunt-strip-code": "^0.1.2",
+    "grunt-text-replace": "^0.3.12",
+    "grunt-wirecloud": "^0.7.1"
+  }
+}
