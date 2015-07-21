@@ -1,14 +1,16 @@
 NGSI Browser widget
 ===================
 
-The NGSI Browser widgets allows you to browser [Orion Context
+The NGSI Browser widget allows you to browser [Orion Context
 Broker](http://catalogue.fiware.org/enablers/publishsubscribe-context-broker-orion-context-broker)
-server in a easy and paginated way.
+servers in a easy and paginated way. This is done using the `queryContext`, so
+updates made into the context broker are not reflected immediately when using
+this widget.
 
-Latest version of this widget is always [provided in FIWARE
-Lab](https://store.lab.fiware.org/search/keyword/OrionStarterKit) where you
-can make use of it on the [Mashup portal](https://mashup.lab.fiware.org).
-Remember to take a look into the example mashups provided in the OrionStarterKit offering.
+> Latest version of this widget is always provided in [FIWARE
+> Lab](https://store.lab.fiware.org/search/keyword/OrionStarterKit) where you
+> can make use of it on the [Mashup portal](https://mashup.lab.fiware.org).
+> Remember to take a look into the example mashups provided in the OrionStarterKit offering.
 
 Build
 -----
@@ -67,15 +69,6 @@ Settings and Usage
   empty, in that case, entities won't be filtered by id.
 - **Extra Attributes:** Comma separated list of attributes to be displayed in
   the widget as extra columns.
-
-**NOTE** If you are using a custom instance of the Orion Context Broker, take
-into account that by default Orion doesn't support sending notifications to
-https endpoints. In those cases you can make use of a NGSI available through
-http at (http://ngsiproxy.lab.fiware.org) instead of using the default one that
-uses https (https://ngsiproxy.lab.fiware.org). Anyway, it is very recommended
-to enable the https support (see this
-[link](http://stackoverflow.com/questions/23338154/orion-context-broker-https-for-subscribers)
-for more info about this matter).
 
 ### Wiring
 
