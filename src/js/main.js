@@ -179,13 +179,13 @@
 
                 content = new StyledElements.Fragment();
 
-                button = new StyledElements.Button({'class': 'btn-danger', 'iconClass': 'icon-trash', 'title': 'Delete'});
+                button = new StyledElements.StyledButton({'class': 'btn-danger', 'iconClass': 'icon-trash', 'title': 'Delete'});
                 button.addEventListener("click", function () {
                     this.ngsi_connection.deleteAttributes([{'entity': {id: entry.id, type: entry.type}}]);
                 }.bind(this));
                 content.appendChild(button);
 
-                button = new StyledElements.Button({'class': 'btn-primary', 'iconClass': 'icon-play', 'title': 'Use'});
+                button = new StyledElements.StyledButton({'class': 'btn-primary', 'iconClass': 'icon-play', 'title': 'Use'});
                 button.addEventListener("click", function () {
                     MashupPlatform.wiring.pushEvent('selection', JSON.stringify(entry));
                 }.bind(this));
@@ -199,7 +199,8 @@
         this.table = new StyledElements.ModelTable(fields, {id: 'id', pageSize: 20, source: this.ngsi_source, 'class': 'table-striped'});
         this.table.addEventListener("click", onRowClick);
         this.table.reload();
-        this.layout.center.clear().appendChild(this.table);
+        this.layout.center.clear();
+        this.layout.center.appendChild(this.table);
     };
 
     var data_viewer = new DataViewer();
