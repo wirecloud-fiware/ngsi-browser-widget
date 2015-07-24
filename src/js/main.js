@@ -179,7 +179,17 @@
 
                 button = new StyledElements.StyledButton({'class': 'btn-danger', 'iconClass': 'icon-trash', 'title': 'Delete'});
                 button.addEventListener("click", function () {
-                    this.ngsi_connection.deleteAttributes([{'entity': {id: entry.id, type: entry.type}}]);
+                    this.ngsi_connection.deleteAttributes(
+                        [
+                            {'entity': {id: entry.id, type: entry.type}}
+                        ],
+                        {
+                            onSuccess: this.ngsi_source.refresh.bind(this.ngsi_source),
+                            onFailure: function (error) {
+                                MashupPlatform.widget.log(error);
+                            }
+                        }
+                    );
                 }.bind(this));
                 content.appendChild(button);
 
