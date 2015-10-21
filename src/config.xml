@@ -26,6 +26,5 @@
     </wiring>
 
     <contents src="index.html" useplatformstyle="true"/>
-    <rendering height="24" width="6"/>
-    <!-- Only works on WireCloud 0.8.0, disabled by now <rendering height="33%" width="33%"/>-->
+    <rendering height="300px" width="33%"/>
 </widget>
