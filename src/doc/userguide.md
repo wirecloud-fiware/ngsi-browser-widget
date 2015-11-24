@@ -1,5 +1,5 @@
-NGSI Browser widget
-===================
+Introduction
+============
 
 The NGSI Browser widget allows you to browser [Orion Context
 Broker](http://catalogue.fiware.org/enablers/publishsubscribe-context-broker-orion-context-broker)
@@ -12,39 +12,8 @@ this widget.
 > can make use of it on the [Mashup portal](https://mashup.lab.fiware.org).
 > Remember to take a look into the example mashups provided in the OrionStarterKit offering.
 
-Build
------
-
-Be sure to have installed [Node.js](http://node.js). For example, you can install it on Ubuntu and Debian running the following commands:
-
-```bash
-curl -sL https://deb.nodesource.com/setup | sudo bash -
-sudo apt-get install nodejs
-sudo apt-get install npm
-```
-
-Install other npm dependencies by running:
-
-```bash
-npm install
-```
-
-For build the widget you need download grunt:
-
-```bash
-sudo npm install -g grunt-cli
-```
-
-And now, you can use grunt:
-
-```bash
-grunt
-```
-
-If everything goes well, you will find a wgt file in the `dist` folder.
-
-Settings and Usage
-------------------
+Settings
+--------
 
 ### Settings
 
@@ -70,7 +39,7 @@ Settings and Usage
 - **NGSI tenant/service Path**: Tenant/service path to use when connecting to
   the context broker. Must be a string of alphanumeric characters (lowercase)
   and the `_` symbol separated by `/` slashes. Maximum length is 50 characters.
-  If empty, the default service path will be used: `/` 
+  If empty, the default service path will be used: `/`
 - **NGSI entity types:** A comma separated list of entity types to use for
   filtering entities from the Orion Context broker. This field cannot be empty.
 - **Id pattern:** Id pattern for filtering entities. This preference can be
@@ -97,20 +66,3 @@ Settings and Usage
         "current_position": "43.47173, -3.7967205"
     }
     ```
-
-Copyright and License
----------------------
-
-Copyright (c) 2015 CoNWeT Lab., Universidad Politecnica de Madrid
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-  http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.

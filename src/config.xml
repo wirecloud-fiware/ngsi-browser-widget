@@ -7,6 +7,12 @@
         <description>Browse available entities on a given Orio context broker server</description>
         <longdescription>DESCRIPTION.md</longdescription>
         <authors>Álvaro Arranz García &lt;aarranz@conwet.com&gt;</authors>
+        <homepage>https://github.com/wirecloud-fiware/ngsi-browser-widget</homepage>
+        <license>Apache License 2.0</license>
+        <licenseurl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseurl>
+        <doc>doc/userguide.md</doc>
+        <changelog>doc/changelog.md</changelog>
+        <issuetracker>https://github.com/wirecloud-fiware/ngsi-browser-widget/issues</issuetracker>
     </details>
 
     <requirements>
