@@ -31,7 +31,7 @@
 
         /* Preferences */
         MashupPlatform.prefs.registerCallback(function (newValues) {
-            if ('ngsi_server' in newValues || 'use_user_fiware_token' in newValues || 'ngsi_tenant' in newValues) {
+            if ('ngsi_server' in newValues || 'use_user_fiware_token' in newValues || 'ngsi_tenant' in newValues || 'ngsi_service_path' in newValues) {
                 this.updateNGSIConnection();
             }
             if ('extra_attributes' in newValues) {
