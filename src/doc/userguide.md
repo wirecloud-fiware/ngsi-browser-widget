@@ -36,10 +36,10 @@ Settings
   broker. Must be a string of alphanumeric characters (lowercase) and the `_`
   symbol. Maximum length is 50 characters. If empty, the default tenant will be
   used
-- **NGSI tenant/service Path**: Tenant/service path to use when connecting to
-  the context broker. Must be a string of alphanumeric characters (lowercase)
-  and the `_` symbol separated by `/` slashes. Maximum length is 50 characters.
-  If empty, the default service path will be used: `/`
+- **NGSI scope**: Scope/path to use when connecting to the context broker. Must
+  be a string of alphanumeric characters (lowercase) and the `_` symbol
+  separated by `/` slashes. Maximum length is 50 characters. If empty, the
+  default service path will be used: `/`
 - **NGSI entity types:** A comma separated list of entity types to use for
   filtering entities from the Orion Context broker. This field cannot be empty.
 - **Id pattern:** Id pattern for filtering entities. This preference can be
