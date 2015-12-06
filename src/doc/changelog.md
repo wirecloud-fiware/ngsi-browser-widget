@@ -1,7 +1,8 @@
 ## v1.0.2
 
 - Add support for the `Fiware-ServicePath` used by the tenant/service feature
-  from the Orion Context Broker.
+  from the Orion Context Broker
+- Add a preference for enabling/disabling the type column
 - Improved widget metadata
 
 

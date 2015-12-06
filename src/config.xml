@@ -26,6 +26,7 @@
         <preference name="ngsi_service_path" type="text" label="NGSI scope" description="Scope/path to use when connecting to the context broker. Must be a string of alphanumeric characters (lowercase) and the &quot;_&quot; symbol separated by &quot;/&quot; slashes. Maximum length is 50 characters. If empty, the default service path will be used: /" default="/"/>
         <preference name="ngsi_entities" type="text" label="NGSI entity types" description="A comma separated list of entity types to use for filtering entities from the Orion Context broker. Leave this field empty for no filtering by type." default=""/>
         <preference name="ngsi_id_filter" type="text" label="Id pattern" description="Id pattern for filtering entities. This preference can be empty, in that case, entities won't be filtered by id." default=""/>
+        <preference name="type_column" type="boolean" label="Display Entity Type" description="Display a column with the type of the entity" default="true"/>
         <preference name="extra_attributes" type="text" label="Extra Attributes" description="Comma separated list of attributes to be displayed in the widget as extra columns" default=""/>
     </preferences>
 

@@ -34,7 +34,7 @@
             if ('ngsi_server' in newValues || 'use_user_fiware_token' in newValues || 'ngsi_tenant' in newValues || 'ngsi_service_path' in newValues) {
                 this.updateNGSIConnection();
             }
-            if ('extra_attributes' in newValues) {
+            if ('extra_attributes' in newValues || 'type_column' in newValues) {
                 createTable.call(this);
             }
             this.ngsi_source.goToFirst();
@@ -170,9 +170,12 @@
 
         // Create the table
         fields = [
-            {field: 'id', label: 'Id', sortable: false},
-            {field: 'type', label: 'Type', sortable: false}
+            {field: 'id', label: 'Id', sortable: false}
         ];
+        if (MashupPlatform.prefs.get('type_column')) {
+            fields.push({field: 'type', label: 'Type', sortable: false});
+        }
+
         extra_attributes = MashupPlatform.prefs.get('extra_attributes').trim();
         if (extra_attributes !== "") {
             extra_attributes = extra_attributes.split(new RegExp(',\\s*'));
