@@ -34,7 +34,7 @@
             if ('ngsi_server' in newValues || 'use_user_fiware_token' in newValues || 'ngsi_tenant' in newValues || 'ngsi_service_path' in newValues) {
                 this.updateNGSIConnection();
             }
-            if ('extra_attributes' in newValues || 'type_column' in newValues) {
+            if ('extra_attributes' in newValues || 'type_column' in newValues || 'allow_delete' in newValues || 'allow_use') {
                 createTable.call(this);
             }
             this.ngsi_source.goToFirst();
@@ -183,40 +183,47 @@
                 fields.push({field: extra_attributes[i], sortable: false});
             }
         }
-        fields.push({
-            label: 'Actions',
-            width: '100px',
-            contentBuilder: function (entry) {
-                var content, button;
 
-                content = new StyledElements.Fragment();
+        if (MashupPlatform.prefs.get('allow_delete') || MashupPlatform.prefs.get('allow_use')) {
+            fields.push({
+                label: 'Actions',
+                width: '100px',
+                contentBuilder: function (entry) {
+                    var content, button;
 
-                button = new StyledElements.StyledButton({'class': 'btn-danger', 'iconClass': 'icon-trash', 'title': 'Delete'});
-                button.addEventListener("click", function () {
-                    this.ngsi_connection.deleteAttributes(
-                        [
-                            {'entity': {id: entry.id, type: entry.type}}
-                        ],
-                        {
-                            onSuccess: this.ngsi_source.refresh.bind(this.ngsi_source),
-                            onFailure: function (error) {
-                                MashupPlatform.widget.log(error);
-                            }
-                        }
-                    );
-                }.bind(this));
-                content.appendChild(button);
+                    content = new StyledElements.Fragment();
 
-                button = new StyledElements.StyledButton({'class': 'btn-primary', 'iconClass': 'icon-play', 'title': 'Use'});
-                button.addEventListener("click", function () {
-                    MashupPlatform.wiring.pushEvent('selection', JSON.stringify(entry));
-                }.bind(this));
-                content.appendChild(button);
+                    if (MashupPlatform.prefs.get('allow_delete')) {
+                        button = new StyledElements.StyledButton({'class': 'btn-danger', 'iconClass': 'icon-trash', 'title': 'Delete'});
+                        button.addEventListener("click", function () {
+                            this.ngsi_connection.deleteAttributes(
+                                [
+                                    {'entity': {id: entry.id, type: entry.type}}
+                                ],
+                                {
+                                    onSuccess: this.ngsi_source.refresh.bind(this.ngsi_source),
+                                    onFailure: function (error) {
+                                        MashupPlatform.widget.log(error);
+                                    }
+                                }
+                            );
+                        }.bind(this));
+                        content.appendChild(button);
+                    }
 
-                return content;
-            }.bind(this),
-            sortable: false
-        });
+                    if (MashupPlatform.prefs.get('allow_use')) {
+                        button = new StyledElements.StyledButton({'class': 'btn-primary', 'iconClass': 'icon-play', 'title': 'Use'});
+                        button.addEventListener("click", function () {
+                            MashupPlatform.wiring.pushEvent('selection', JSON.stringify(entry));
+                        }.bind(this));
+                        content.appendChild(button);
+                    }
+
+                    return content;
+                }.bind(this),
+                sortable: false
+            });
+        }
 
         this.table = new StyledElements.ModelTable(fields, {id: 'id', pageSize: 20, source: this.ngsi_source, 'class': 'table-striped'});
         this.table.addEventListener("click", onRowClick);

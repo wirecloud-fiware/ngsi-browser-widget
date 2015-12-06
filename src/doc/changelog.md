@@ -3,6 +3,7 @@
 - Add support for the `Fiware-ServicePath` used by the tenant/service feature
   from the Orion Context Broker
 - Add a preference for enabling/disabling the type column
+- Add preferences for enabling/disabling the delete and use buttons
 - Improved widget metadata
 
 
