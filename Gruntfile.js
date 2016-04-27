@@ -1,5 +1,5 @@
 /*!
- *   Copyright 2014-2015 CoNWeT Lab., Universidad Politecnica de Madrid
+ *   Copyright 2014-2016 CoNWeT Lab., Universidad Politecnica de Madrid
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  *   limitations under the License.
  */
 
+var ConfigParser = require('wirecloud-config-parser');
+var parser = new ConfigParser('src/config.xml');
 
 module.exports = function (grunt) {
 
@@ -21,7 +23,41 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
 
-        pkg: grunt.file.readJSON('package.json'),
+        metadata: parser.getData(),
+
+        jshint: {
+            options: {
+                jshintrc: true
+            },
+            all: {
+                files: {
+                    src: ['src/js/**/*.js']
+                }
+            },
+            grunt: {
+                options: {
+                    jshintrc: '.jshintrc-node'
+                },
+                files: {
+                    src: ['Gruntfile.js']
+                }
+            }
+        },
+
+        jscs: {
+            widget: {
+                src: 'src/js/**/*.js',
+                options: {
+                    config: ".jscsrc"
+                }
+            },
+            grunt: {
+                src: 'Gruntfile.js',
+                options: {
+                    config: ".jscsrc"
+                }
+            }
+        },
 
         copy: {
             main: {
@@ -41,17 +77,17 @@ module.exports = function (grunt) {
             widget: {
                 options: {
                     mode: 'zip',
-                    archive: 'dist/<%= pkg.vendor %>_<%= pkg.name %>_<%= pkg.version %>.wgt'
+                    archive: 'dist/<%= metadata.vendor %>_<%= metadata.name %>_<%= metadata.version %>.wgt'
                 },
                 files: [
                     {
                         expand: true,
                         cwd: 'src',
                         src: [
+                            'DESCRIPTION.md',
                             'css/**/*',
                             'doc/**/*',
                             'images/**/*',
-                            'DESCRIPTION.md',
                             'index.html',
                             'config.xml'
                         ]
@@ -90,85 +126,46 @@ module.exports = function (grunt) {
             }
         },
 
-        replace: {
-            version: {
-                overwrite: true,
-                src: ['src/config.xml'],
-                replacements: [{
-                    from: /version=\"[0-9]+\.[0-9]+\.[0-9]+(-dev|a[0-9])?\"/g,
-                    to: 'version="<%= pkg.version %>"'
-                }]
-            }
-        },
-
-        jscs: {
-            widget: {
-                src: 'src/js/**/*',
-                options: {
-                    config: ".jscsrc"
-                }
-            },
-            grunt: {
-                src: 'Gruntfile.js',
-                options: {
-                    config: ".jscsrc"
-                }
-            }
-        },
-
-        jshint: {
-            options: {
-                jshintrc: true
-            },
-            all: {
-                files: {
-                    src: ['src/js/**/*.js']
-                }
-            },
-            grunt: {
-                options: {
-                    jshintrc: '.jshintrc-node'
-                },
-                files: {
-                    src: ['Gruntfile.js']
-                }
-            }
-        },
-
         wirecloud: {
+            options: {
+                overwrite: false
+            },
             publish: {
-                file: 'build/<%= pkg.vendor %>_<%= pkg.name %>_<%= pkg.version %>-dev.wgt'
+                file: 'dist/<%= metadata.vendor %>_<%= metadata.name %>_<%= metadata.version %>.wgt'
             }
         }
-
     });
 
     grunt.loadNpmTasks('grunt-wirecloud');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-jscs');
     grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks("grunt-jscs");
     grunt.loadNpmTasks('grunt-strip-code');
     grunt.loadNpmTasks('grunt-text-replace');
 
     grunt.registerTask('test', [
-        'jshint:grunt',
         'jshint',
-        'jscs'
+        'jshint:grunt',
+        'jscs',
+    ]);
+
+    grunt.registerTask('build', [
+        'clean:temp',
+        'copy:main',
+        'strip_code',
+        'compress:widget'
     ]);
 
     grunt.registerTask('default', [
         'test',
-        'clean:temp',
-        'copy:main',
-        'strip_code',
-        'replace:version',
-        'compress:widget'
+        'build'
     ]);
 
     grunt.registerTask('publish', [
         'default',
         'wirecloud'
     ]);
+
 };
