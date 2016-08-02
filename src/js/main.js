@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 CoNWeT Lab., Universidad Politécnica de Madrid
+ * Copyright (c) 2015-2016 CoNWeT Lab., Universidad Politécnica de Madrid
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 /* global NGSI, StyledElements */
 
-(function () {
+(function (se) {
 
     "use strict";
 
-    var DataViewer = function DataViewer() {
+    var NGSIBrowser = function NGSIBrowser() {
 
         /* Context */
         MashupPlatform.widget.context.registerCallback(function (newValues) {
@@ -44,19 +44,19 @@
         this.table = null;
     };
 
-    DataViewer.prototype.init = function init() {
+    NGSIBrowser.prototype.init = function init() {
         createNGSISource.call(this);
         this.updateNGSIConnection();
 
-        this.layout = new StyledElements.BorderLayout();
+        this.layout = new se.VerticalLayout();
         createTable.call(this);
 
-        this.layout.getCenterContainer().addClassName('loading');
+        this.layout.center.addClassName('loading');
         this.layout.insertInto(document.body);
         this.layout.repaint();
     };
 
-    DataViewer.prototype.updateNGSIConnection = function updateNGSIConnection() {
+    NGSIBrowser.prototype.updateNGSIConnection = function updateNGSIConnection() {
 
         this.ngsi_server = MashupPlatform.prefs.get('ngsi_server');
         var options = {
@@ -108,7 +108,7 @@
     };
 
     var createNGSISource = function createNGSISource() {
-        this.ngsi_source = new StyledElements.PaginatedSource({
+        this.ngsi_source = new se.PaginatedSource({
             'pageSize': 20,
             'requestFunc': function (page, options, onSuccess, onError) {
                 var entityIdList, entityId, types, i, attributes;
@@ -158,10 +158,10 @@
             }.bind(this)
         });
         this.ngsi_source.addEventListener('requestStart', function () {
-            this.layout.getCenterContainer().disable();
+            this.layout.center.disable();
         }.bind(this));
         this.ngsi_source.addEventListener('requestEnd', function () {
-            this.layout.getCenterContainer().enable();
+            this.layout.center.enable();
         }.bind(this));
     };
 
@@ -191,10 +191,10 @@
                 contentBuilder: function (entry) {
                     var content, button;
 
-                    content = new StyledElements.Fragment();
+                    content = new se.Fragment();
 
                     if (MashupPlatform.prefs.get('allow_delete')) {
-                        button = new StyledElements.StyledButton({'class': 'btn-danger', 'iconClass': 'icon-trash', 'title': 'Delete'});
+                        button = new se.Button({'class': 'btn-danger', 'iconClass': 'icon-trash', 'title': 'Delete'});
                         button.addEventListener("click", function () {
                             this.ngsi_connection.deleteAttributes(
                                 [
@@ -212,7 +212,7 @@
                     }
 
                     if (MashupPlatform.prefs.get('allow_use')) {
-                        button = new StyledElements.StyledButton({'class': 'btn-primary', 'iconClass': 'icon-play', 'title': 'Use'});
+                        button = new se.Button({'class': 'btn-primary', 'iconClass': 'icon-play', 'title': 'Use'});
                         button.addEventListener("click", function () {
                             MashupPlatform.wiring.pushEvent('selection', JSON.stringify(entry));
                         }.bind(this));
@@ -225,14 +225,14 @@
             });
         }
 
-        this.table = new StyledElements.ModelTable(fields, {id: 'id', pageSize: 20, source: this.ngsi_source, 'class': 'table-striped'});
+        this.table = new se.ModelTable(fields, {id: 'id', pageSize: 20, source: this.ngsi_source, 'class': 'table-striped'});
         this.table.addEventListener("click", onRowClick);
         this.table.reload();
         this.layout.center.clear();
         this.layout.center.appendChild(this.table);
     };
 
-    var data_viewer = new DataViewer();
-    window.addEventListener("DOMContentLoaded", data_viewer.init.bind(data_viewer), false);
+    var widget = new NGSIBrowser();
+    window.addEventListener("DOMContentLoaded", widget.init.bind(widget), false);
 
-})();
+})(StyledElements);

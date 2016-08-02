@@ -17,6 +17,7 @@
 
     <requirements>
         <feature name="NGSI"/>
+        <feature name="StyledElements"/>
     </requirements>
 
     <preferences>
