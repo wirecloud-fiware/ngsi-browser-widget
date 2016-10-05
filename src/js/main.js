@@ -268,11 +268,11 @@
         if (mp.prefs.get('allow_delete') || mp.prefs.get('allow_use')) {
             fields.push({
                 label: 'Actions',
-                width: '100px',
+                width: '120px',
                 contentBuilder: function (entry) {
                     var content, button;
 
-                    content = new se.Fragment();
+                    content = new se.Container({class: "btn-group"});
 
                     if (mp.prefs.get('allow_edit')) {
                         button = new se.Button({'iconClass': 'fa fa-pencil', 'title': 'Edit'});
