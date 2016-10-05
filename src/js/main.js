@@ -157,7 +157,9 @@
     };
 
     var onRowClick = function onRowClick(row) {
-        //MashupPlatform.wiring.pushEvent('selected-row', row);
+        if (!mp.prefs.get("allow_use")) {
+            mp.wiring.pushEvent('selected-row', row);
+        }
     };
 
     var onNGSIQuerySuccess = function onNGSIQuerySuccess(next, page, data, details) {
