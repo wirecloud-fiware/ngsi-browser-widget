@@ -16,22 +16,22 @@
 
 /* global NGSI, StyledElements */
 
-(function (se) {
+(function (mp, se) {
 
     "use strict";
 
     var NGSIBrowser = function NGSIBrowser() {
 
         /* Context */
-        MashupPlatform.widget.context.registerCallback(function (newValues) {
+        mp.widget.context.registerCallback(function (newValues) {
             if (this.layout && ("heightInPixels" in newValues || "widthInPixels" in newValues)) {
                 this.layout.repaint();
             }
         }.bind(this));
 
         /* Preferences */
-        MashupPlatform.prefs.registerCallback(function (newValues) {
-            if ('ngsi_server' in newValues || 'use_user_fiware_token' in newValues || 'ngsi_tenant' in newValues || 'ngsi_service_path' in newValues) {
+        mp.prefs.registerCallback(function (newValues) {
+            if ('ngsi_server' in newValues || 'use_user_fiware_token' in newValues || 'use_owner_credentials' in newValues || 'ngsi_tenant' in newValues || 'ngsi_service_path' in newValues) {
                 this.updateNGSIConnection();
             }
             if ('extra_attributes' in newValues || 'type_column' in newValues || 'allow_delete' in newValues || 'allow_use') {
@@ -61,16 +61,16 @@
 
     NGSIBrowser.prototype.updateNGSIConnection = function updateNGSIConnection() {
 
-        this.ngsi_server = MashupPlatform.prefs.get('ngsi_server');
+        this.ngsi_server = mp.prefs.get('ngsi_server');
         var options = {
             request_headers: {},
-            use_user_fiware_token: MashupPlatform.prefs.get('use_user_fiware_token')
+            use_user_fiware_token: mp.prefs.get('use_user_fiware_token')
         };
-        var tenant = MashupPlatform.prefs.get('ngsi_tenant').trim().toLowerCase();
+        var tenant = mp.prefs.get('ngsi_tenant').trim().toLowerCase();
         if (tenant !== '') {
             options.request_headers['FIWARE-Service'] = tenant;
         }
-        var path = MashupPlatform.prefs.get('ngsi_service_path').trim().toLowerCase();
+        var path = mp.prefs.get('ngsi_service_path').trim().toLowerCase();
         if (path !== '' && path !== '/') {
             options.request_headers['FIWARE-ServicePath'] = path;
         }
@@ -157,11 +157,11 @@
 
                 if (this.ngsi_connection !== null) {
                     entityIdList = [];
-                    var id_pattern = MashupPlatform.prefs.get('ngsi_id_filter');
+                    var id_pattern = mp.prefs.get('ngsi_id_filter');
                     if (id_pattern === '') {
                         id_pattern = '.*';
                     }
-                    types = MashupPlatform.prefs.get('ngsi_entities').trim();
+                    types = mp.prefs.get('ngsi_entities').trim();
                     if (types !== '') {
                         types = types.split(new RegExp(',\\s*'));
                         for (i = 0; i < types.length; i++) {
@@ -214,11 +214,11 @@
         fields = [
             {field: 'id', label: 'Id', sortable: false}
         ];
-        if (MashupPlatform.prefs.get('type_column')) {
+        if (mp.prefs.get('type_column')) {
             fields.push({field: 'type', label: 'Type', sortable: false});
         }
 
-        extra_attributes = MashupPlatform.prefs.get('extra_attributes').trim();
+        extra_attributes = mp.prefs.get('extra_attributes').trim();
         if (extra_attributes !== "") {
             extra_attributes = extra_attributes.split(new RegExp(',\\s*'));
             for (i = 0; i < extra_attributes.length; i++) {
@@ -226,7 +226,7 @@
             }
         }
 
-        if (MashupPlatform.prefs.get('allow_delete') || MashupPlatform.prefs.get('allow_use')) {
+        if (mp.prefs.get('allow_delete') || mp.prefs.get('allow_use')) {
             fields.push({
                 label: 'Actions',
                 width: '100px',
@@ -244,7 +244,7 @@
                         content.appendChild(button);
                     }
 
-                    if (MashupPlatform.prefs.get('allow_delete')) {
+                    if (mp.prefs.get('allow_delete')) {
                         button = new se.Button({'class': 'btn-danger', 'iconClass': 'icon-trash', 'title': 'Delete'});
                         button.addEventListener("click", function () {
                             this.ngsi_connection.deleteAttributes(
@@ -254,7 +254,7 @@
                                 {
                                     onSuccess: this.ngsi_source.refresh.bind(this.ngsi_source),
                                     onFailure: function (error) {
-                                        MashupPlatform.widget.log(error);
+                                        mp.widget.log(error);
                                     }
                                 }
                             );
@@ -262,10 +262,10 @@
                         content.appendChild(button);
                     }
 
-                    if (MashupPlatform.prefs.get('allow_use')) {
+                    if (mp.prefs.get('allow_use')) {
                         button = new se.Button({'class': 'btn-primary', 'iconClass': 'icon-play', 'title': 'Use'});
                         button.addEventListener("click", function () {
-                            MashupPlatform.wiring.pushEvent('selection', JSON.stringify(entry));
+                            mp.wiring.pushEvent('selection', JSON.stringify(entry));
                         }.bind(this));
                         content.appendChild(button);
                     }
@@ -286,4 +286,4 @@
     var widget = new NGSIBrowser();
     window.addEventListener("DOMContentLoaded", widget.init.bind(widget), false);
 
-})(StyledElements);
+})(MashupPlatform, StyledElements);
