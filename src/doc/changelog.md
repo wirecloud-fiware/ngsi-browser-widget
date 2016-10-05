@@ -1,3 +1,7 @@
+## v1.1.0
+
+- Add support for editing entities
+
 ## v1.0.2
 
 - Add support for the `Fiware-ServicePath` used by the tenant/service feature

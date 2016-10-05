@@ -54,6 +54,9 @@
         this.layout.center.addClassName('loading');
         this.layout.insertInto(document.body);
         this.layout.repaint();
+
+        this.template_output = mp.widget.createOutputEndpoint();
+        this.create_entity_endpoint = mp.widget.createInputEndpoint(onCreateEntity.bind(this));
     };
 
     NGSIBrowser.prototype.updateNGSIConnection = function updateNGSIConnection() {
@@ -78,6 +81,45 @@
     /**************************************************************************/
     /****************************** HANDLERS **********************************/
     /**************************************************************************/
+
+    var openEditorWidget = function openEditorWidget() {
+        if (this.editor_widget == null) {
+            this.editor_widget = mp.mashup.addWidget('CoNWeT/json-editor/1.0');
+            this.editor_widget.addEventListener('remove', onEditorWidgetClose.bind(this));
+            this.template_output.connect(this.editor_widget.inputs.input);
+            this.create_entity_endpoint.connect(this.editor_widget.outputs.output);
+        }
+    };
+
+    var onEditorWidgetClose = function onEditorWidgetClose() {
+        this.editor_widget = null;
+    };
+
+    var onCreateEntity = function onCreateEntity(data_string) {
+        var data = JSON.parse(data_string);
+        var entity = {
+            id: data.id,
+            type: data.type
+        };
+        delete data.id;
+        delete data.type;
+
+        var attributes = [];
+        Object.keys(data).forEach(function (key) {
+            attributes.push({name: key, contextValue: data[key]});
+        });
+        this.ngsi_connection.addAttributes(
+            [{entity: entity, attributes: attributes}],
+            {
+                onSuccess: this.ngsi_source.refresh.bind(this.ngsi_source),
+                onComplete: function () {
+                    if (this.editor_widget != null) {
+                        this.editor_widget.remove();
+                    }
+                }.bind(this)
+            }
+        );
+    };
 
     var onRowClick = function onRowClick(row) {
         //MashupPlatform.wiring.pushEvent('selected-row', row);
@@ -192,6 +234,15 @@
                     var content, button;
 
                     content = new se.Fragment();
+
+                    if (mp.prefs.get('allow_edit')) {
+                        button = new se.Button({'iconClass': 'fa fa-pencil', 'title': 'Edit'});
+                        button.addEventListener('click', function () {
+                            openEditorWidget.call(this);
+                            this.template_output.pushEvent(JSON.stringify(entry));
+                        }.bind(this));
+                        content.appendChild(button);
+                    }
 
                     if (MashupPlatform.prefs.get('allow_delete')) {
                         button = new se.Button({'class': 'btn-danger', 'iconClass': 'icon-trash', 'title': 'Delete'});
