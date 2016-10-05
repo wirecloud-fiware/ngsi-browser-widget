@@ -36,6 +36,7 @@
     </preferences>
 
     <wiring>
+        <inputendpoint name="filter-by-type" label="Filter by Type" type="text" friendcode="ngsi-type-info" />
         <outputendpoint name="selection" label="Selection" type="text"/>
     </wiring>
 

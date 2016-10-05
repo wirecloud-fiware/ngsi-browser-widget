@@ -40,6 +40,30 @@
             this.ngsi_source.goToFirst();
         }.bind(this));
 
+        /* Wiring */
+        mp.wiring.registerCallback("filter-by-type", function (type_info) {
+            if (typeof type_info === "string") {
+                try {
+                    type_info = JSON.parse(type_info);
+                } catch (error) {
+                    throw new mp.wiring.EndpointValueError("Invalid NGSI type details");
+                }
+            }
+
+            if (typeof type_info !== "object") {
+                throw new mp.wiring.EndpointValueError("Invalid NGSI type details");
+            }
+
+            if (!("name" in type_info)) {
+                throw new mp.wiring.EndpointTypeError("Invalid NGSI type details");
+            }
+
+            if (this.type_filter !== type_info.name) {
+                this.type_filter = type_info.name;
+                this.ngsi_source.goToFirst();
+            }
+        }.bind(this));
+
         this.layout = null;
         this.table = null;
     };
@@ -161,9 +185,17 @@
                     if (id_pattern === '') {
                         id_pattern = '.*';
                     }
-                    types = mp.prefs.get('ngsi_entities').trim();
-                    if (types !== '') {
-                        types = types.split(new RegExp(',\\s*'));
+                    if (this.type_filter) {
+                        types = [this.type_filter];
+                    } else {
+                        types = mp.prefs.get('ngsi_entities').trim();
+                        if (types !== '') {
+                            types = types.split(new RegExp(',\\s*'));
+                        } else {
+                            types = null;
+                        }
+                    }
+                    if (types != null) {
                         for (i = 0; i < types.length; i++) {
                             entityId = {
                                 id: id_pattern,
