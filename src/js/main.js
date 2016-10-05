@@ -212,13 +212,7 @@
                         entityIdList.push(entityId);
                     }
 
-                    attributes = MashupPlatform.prefs.get('extra_attributes').trim();
-                    if (attributes !== "") {
-                        attributes = attributes.split(new RegExp(',\\s*'));
-                    } else {
-                        attributes = [];
-                    }
-
+                    attributes = [];
                     this.ngsi_connection.query(entityIdList, attributes, {
                         details: true,
                         limit: options.pageSize,
