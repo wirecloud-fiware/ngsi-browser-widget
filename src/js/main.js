@@ -79,8 +79,19 @@
         this.layout.insertInto(document.body);
         this.layout.repaint();
 
+        this.add_entity_button = new se.Button({
+            class: "se-btn-circle add-entity-button z-depth-3",
+            iconClass: "icon-plus",
+        });
+
         this.template_output = mp.widget.createOutputEndpoint();
         this.create_entity_endpoint = mp.widget.createInputEndpoint(onCreateEntity.bind(this));
+        this.add_entity_button.addEventListener('click', function () {
+            openEditorWidget.call(this);
+            this.template_output.pushEvent('{"id": "", "type": ""}');
+        }.bind(this));
+
+        this.layout.center.appendChild(this.add_entity_button);
     };
 
     NGSIBrowser.prototype.updateNGSIConnection = function updateNGSIConnection() {

@@ -1,6 +1,7 @@
 ## v1.1.0
 
 - Add support for editing entities
+- Add support for creating new entities
 
 ## v1.0.2
 
