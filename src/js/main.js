@@ -87,8 +87,8 @@
         this.editor_config_output = mp.widget.createOutputEndpoint();
         this.template_output = mp.widget.createOutputEndpoint();
         this.create_entity_endpoint = mp.widget.createInputEndpoint(onCreateEntity.bind(this));
-        this.add_entity_button.addEventListener('click', function () {
-            openEditorWidget.call(this);
+        this.add_entity_button.addEventListener('click', function (button) {
+            openEditorWidget.call(this, button);
             this.editor_config_output.pushEvent({
                 "blacklist": []
             });
@@ -121,9 +121,9 @@
     /****************************** HANDLERS **********************************/
     /**************************************************************************/
 
-    var openEditorWidget = function openEditorWidget() {
+    var openEditorWidget = function openEditorWidget(button) {
         if (this.editor_widget == null) {
-            this.editor_widget = mp.mashup.addWidget('CoNWeT/json-editor/1.0');
+            this.editor_widget = mp.mashup.addWidget('CoNWeT/json-editor/1.0', {refposition: button.getBoundingClientRect()});
             this.editor_widget.addEventListener('remove', onEditorWidgetClose.bind(this));
             this.editor_config_output.connect(this.editor_widget.inputs.configure);
             this.template_output.connect(this.editor_widget.inputs.input);
@@ -281,8 +281,8 @@
 
                     if (mp.prefs.get('allow_edit')) {
                         button = new se.Button({'iconClass': 'fa fa-pencil', 'title': 'Edit'});
-                        button.addEventListener('click', function () {
-                            openEditorWidget.call(this);
+                        button.addEventListener('click', function (button) {
+                            openEditorWidget.call(this, button);
                             this.editor_config_output.pushEvent({
                                 "blacklist": [
                                     ["id"],
