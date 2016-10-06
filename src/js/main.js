@@ -84,10 +84,14 @@
             iconClass: "icon-plus",
         });
 
+        this.editor_config_output = mp.widget.createOutputEndpoint();
         this.template_output = mp.widget.createOutputEndpoint();
         this.create_entity_endpoint = mp.widget.createInputEndpoint(onCreateEntity.bind(this));
         this.add_entity_button.addEventListener('click', function () {
             openEditorWidget.call(this);
+            this.editor_config_output.pushEvent({
+                "blacklist": []
+            });
             this.template_output.pushEvent('{"id": "", "type": ""}');
         }.bind(this));
 
@@ -121,6 +125,7 @@
         if (this.editor_widget == null) {
             this.editor_widget = mp.mashup.addWidget('CoNWeT/json-editor/1.0');
             this.editor_widget.addEventListener('remove', onEditorWidgetClose.bind(this));
+            this.editor_config_output.connect(this.editor_widget.inputs.configure);
             this.template_output.connect(this.editor_widget.inputs.input);
             this.create_entity_endpoint.connect(this.editor_widget.outputs.output);
         }
@@ -278,6 +283,12 @@
                         button = new se.Button({'iconClass': 'fa fa-pencil', 'title': 'Edit'});
                         button.addEventListener('click', function () {
                             openEditorWidget.call(this);
+                            this.editor_config_output.pushEvent({
+                                "blacklist": [
+                                    ["id"],
+                                    ["type"],
+                                ]
+                            });
                             this.template_output.pushEvent(JSON.stringify(entry));
                         }.bind(this));
                         content.appendChild(button);
