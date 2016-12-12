@@ -1,7 +1,8 @@
-## v1.1.0
+## v1.1.0 (2016-12-12)
 
-- Add support for editing entities
-- Add support for creating new entities
+- Added initial support for editing entities
+- Added initial support for creating new entities
+- Based on `json-editor` v1.0
 
 ## v1.0.2
 

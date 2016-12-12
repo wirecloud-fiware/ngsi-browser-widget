@@ -90,7 +90,7 @@
         this.add_entity_button.addEventListener('click', function (button) {
             openEditorWidget.call(this, button);
             this.editor_config_output.pushEvent({
-                "blacklist": []
+                "readonly": []
             });
             this.template_output.pushEvent('{"id": "", "type": ""}');
         }.bind(this));
@@ -284,7 +284,7 @@
                         button.addEventListener('click', function (button) {
                             openEditorWidget.call(this, button);
                             this.editor_config_output.pushEvent({
-                                "blacklist": [
+                                "readonly": [
                                     ["id"],
                                     ["type"],
                                 ]
