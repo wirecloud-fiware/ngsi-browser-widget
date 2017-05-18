@@ -181,77 +181,40 @@
         }
     };
 
-    var onNGSIQuerySuccess = function onNGSIQuerySuccess(next, page, data, details) {
-        var search_info, i, j, attributes, attribute, entry;
-
-        for (i = 0; i < data.length; i++) {
-            entry = data[i];
-            attributes = {};
-            for (j = 0; j < entry.attributes.length; j++) {
-                attribute = entry.attributes[j];
-                attributes[attribute.name] = attribute.contextValue;
-            }
-            attributes.id = entry.entity.id;
-            attributes.type = entry.entity.type;
-            data[i] = attributes;
-        }
-
-        search_info = {
-            'resources': data,
-            'current_page': page,
-            'total_count': details.count
-        };
-
-        next(data, search_info);
-    };
-
     var createNGSISource = function createNGSISource() {
         this.ngsi_source = new se.PaginatedSource({
             'pageSize': 20,
             'requestFunc': function (page, options, onSuccess, onError) {
-                var entityIdList, entityId, types, i, attributes;
+                var types;
 
                 if (this.ngsi_connection !== null) {
-                    entityIdList = [];
                     var id_pattern = mp.prefs.get('ngsi_id_filter');
                     if (id_pattern === '') {
                         id_pattern = '.*';
                     }
                     if (this.type_filter) {
-                        types = [this.type_filter];
+                        types = this.type_filter;
                     } else {
                         types = mp.prefs.get('ngsi_entities').trim();
-                        if (types !== '') {
-                            types = types.split(new RegExp(',\\s*'));
-                        } else {
-                            types = null;
-                        }
-                    }
-                    if (types != null) {
-                        for (i = 0; i < types.length; i++) {
-                            entityId = {
-                                id: id_pattern,
-                                type: types[i],
-                                isPattern: true
-                            };
-                            entityIdList.push(entityId);
-                        }
-                    } else {
-                        entityId = {
-                            id: id_pattern,
-                            isPattern: true
-                        };
-                        entityIdList.push(entityId);
                     }
 
-                    attributes = [];
-                    this.ngsi_connection.query(entityIdList, attributes, {
-                        details: true,
+                    this.ngsi_connection.v2.listEntities({
+                        count: true,
+                        idPattern: id_pattern,
+                        keyValues: true,
                         limit: options.pageSize,
                         offset: (page - 1) * options.pageSize,
-                        onSuccess: onNGSIQuerySuccess.bind(null, onSuccess, page),
-                        onFailure: onError
-                    });
+                        type: types
+                    }).then(
+                        (response) => {
+                            onSuccess(response.results, {
+                                resources: response.results,
+                                total_count: response.count,
+                                current_page: page
+                            });
+                        },
+                        onError
+                    );
                 } else {
                     onSuccess([], {resources: [], total_count: 0, current_page: 0});
                 }
@@ -305,15 +268,13 @@
                     if (mp.prefs.get('allow_delete')) {
                         button = new se.Button({'class': 'btn-danger', 'iconClass': 'icon-trash', 'title': 'Delete'});
                         button.addEventListener("click", function () {
-                            this.ngsi_connection.deleteAttributes(
-                                [
-                                    {'entity': {id: entry.id, type: entry.type}}
-                                ],
-                                {
-                                    onSuccess: this.ngsi_source.refresh.bind(this.ngsi_source),
-                                    onFailure: function (error) {
-                                        mp.widget.log(error);
-                                    }
+                            this.ngsi_connection.v2.deleteEntity({
+                                id: entry.id,
+                                type: entry.type
+                            }).then(
+                                this.ngsi_source.refresh.bind(this.ngsi_source),
+                                (error) => {
+                                    mp.widget.log(error);
                                 }
                             );
                         }.bind(this));
