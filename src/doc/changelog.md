@@ -1,3 +1,8 @@
+## v2.0
+
+- Migrate to use NGSI v2, dropping support for v1.
+- Proper support for creating and updating context broker entities.
+
 ## v1.1.0 (2016-12-12)
 
 - Added initial support for editing entities
