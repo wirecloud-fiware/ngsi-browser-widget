@@ -79,23 +79,21 @@
         this.layout.insertInto(document.body);
         this.layout.repaint();
 
-        this.add_entity_button = new se.Button({
+        this.create_entity_button = new se.Button({
             class: "se-btn-circle add-entity-button z-depth-3",
             iconClass: "icon-plus",
         });
 
         this.editor_config_output = mp.widget.createOutputEndpoint();
         this.template_output = mp.widget.createOutputEndpoint();
+        this.update_entity_endpoint = mp.widget.createInputEndpoint(onUpdateEntity.bind(this));
         this.create_entity_endpoint = mp.widget.createInputEndpoint(onCreateEntity.bind(this));
-        this.add_entity_button.addEventListener('click', function (button) {
-            openEditorWidget.call(this, button);
-            this.editor_config_output.pushEvent({
-                "readonly": []
-            });
+        this.create_entity_button.addEventListener('click', function (button) {
+            openEditorWidget.call(this, button, "create");
             this.template_output.pushEvent('{"id": "", "type": ""}');
         }.bind(this));
 
-        this.layout.center.appendChild(this.add_entity_button);
+        this.layout.center.appendChild(this.create_entity_button);
     };
 
     NGSIBrowser.prototype.updateNGSIConnection = function updateNGSIConnection() {
@@ -121,13 +119,35 @@
     /* ***************************** HANDLERS **********************************/
     /* *************************************************************************/
 
-    var openEditorWidget = function openEditorWidget(button) {
+    var openEditorWidget = function openEditorWidget(button, action) {
         if (this.editor_widget == null) {
             this.editor_widget = mp.mashup.addWidget('CoNWeT/json-editor/1.0', {refposition: button.getBoundingClientRect()});
             this.editor_widget.addEventListener('remove', onEditorWidgetClose.bind(this));
+            // Crete a wiring connection for sending editor conf and initial contents
             this.editor_config_output.connect(this.editor_widget.inputs.configure);
             this.template_output.connect(this.editor_widget.inputs.input);
-            this.create_entity_endpoint.connect(this.editor_widget.outputs.output);
+        }
+
+        // Disconnect json editor output endpoint
+        this.editor_widget.outputs.output.disconnect();
+
+        // And reconnect it with the expected one
+        switch (action) {
+        case "edit":
+            this.editor_config_output.pushEvent({
+                "readonly": [
+                    ["id"],
+                    ["type"]
+                ]
+            });
+            this.editor_widget.outputs.output.connect(this.update_entity_endpoint);
+            break;
+        case "create":
+            this.editor_config_output.pushEvent({
+                "readonly": []
+            });
+            this.editor_widget.outputs.output.connect(this.create_entity_endpoint);
+            break;
         }
     };
 
@@ -135,30 +155,24 @@
         this.editor_widget = null;
     };
 
+    var onUpdateEntity = function onUpdateEntity(data_string) {
+        var data = JSON.parse(data_string);
+        this.ngsi_connection.v2.replaceEntityAttributes(data, {keyValues: true}).then(() => {
+            this.ngsi_source.refresh();
+            if (this.editor_widget != null) {
+                this.editor_widget.remove();
+            }
+        });
+    };
+
     var onCreateEntity = function onCreateEntity(data_string) {
         var data = JSON.parse(data_string);
-        var entity = {
-            id: data.id,
-            type: data.type
-        };
-        delete data.id;
-        delete data.type;
-
-        var attributes = [];
-        Object.keys(data).forEach(function (key) {
-            attributes.push({name: key, contextValue: data[key]});
-        });
-        this.ngsi_connection.addAttributes(
-            [{entity: entity, attributes: attributes}],
-            {
-                onSuccess: this.ngsi_source.refresh.bind(this.ngsi_source),
-                onComplete: function () {
-                    if (this.editor_widget != null) {
-                        this.editor_widget.remove();
-                    }
-                }.bind(this)
+        this.ngsi_connection.v2.createEntity(data, {keyValues: true}).then(() => {
+            this.ngsi_source.refresh();
+            if (this.editor_widget != null) {
+                this.editor_widget.remove();
             }
-        );
+        });
     };
 
     var onRowClick = function onRowClick(row) {
@@ -282,13 +296,7 @@
                     if (mp.prefs.get('allow_edit')) {
                         button = new se.Button({'iconClass': 'fa fa-pencil', 'title': 'Edit'});
                         button.addEventListener('click', function (button) {
-                            openEditorWidget.call(this, button);
-                            this.editor_config_output.pushEvent({
-                                "readonly": [
-                                    ["id"],
-                                    ["type"],
-                                ]
-                            });
+                            openEditorWidget.call(this, button, "edit");
                             this.template_output.pushEvent(JSON.stringify(entry));
                         }.bind(this));
                         content.appendChild(button);
