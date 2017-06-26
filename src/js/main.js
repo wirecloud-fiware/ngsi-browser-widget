@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016 CoNWeT Lab., Universidad Politécnica de Madrid
+ * Copyright (c) 2015-2017 CoNWeT Lab., Universidad Politécnica de Madrid
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -185,7 +185,7 @@
         this.ngsi_source = new se.PaginatedSource({
             'pageSize': 20,
             'requestFunc': function (page, options, onSuccess, onError) {
-                var types;
+                var types, orderBy;
 
                 if (this.ngsi_connection !== null) {
                     var id_pattern = mp.prefs.get('ngsi_id_filter');
@@ -196,6 +196,13 @@
                         types = this.type_filter;
                     } else {
                         types = mp.prefs.get('ngsi_entities').trim();
+
+                        if (types === "") {
+                            types = undefined;
+                        }
+                    }
+                    if (options.order.length > 0) {
+                        orderBy = options.order.map((field) => {return field.replace(/^-/, "!");}).join(',');
                     }
 
                     this.ngsi_connection.v2.listEntities({
@@ -204,7 +211,8 @@
                         keyValues: true,
                         limit: options.pageSize,
                         offset: (page - 1) * options.pageSize,
-                        type: types
+                        type: types,
+                        orderBy: orderBy
                     }).then(
                         (response) => {
                             onSuccess(response.results, {
@@ -243,7 +251,7 @@
         if (extra_attributes !== "") {
             extra_attributes = extra_attributes.split(new RegExp(',\\s*'));
             for (i = 0; i < extra_attributes.length; i++) {
-                fields.push({field: extra_attributes[i], sortable: false});
+                fields.push({field: extra_attributes[i], sortable: true});
             }
         }
 
