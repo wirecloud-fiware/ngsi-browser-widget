@@ -1,4 +1,4 @@
-/*!
+/*
  *   Copyright 2014-2016 CoNWeT Lab., Universidad Politecnica de Madrid
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
