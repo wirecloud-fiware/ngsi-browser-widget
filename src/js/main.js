@@ -201,7 +201,7 @@
                             types = undefined;
                         }
                     }
-                    if (options.order.length > 0) {
+                    if (options.order && options.order.length > 0) {
                         orderBy = options.order.map((field) => {return field.replace(/^-/, "!");}).join(',');
                     }
 

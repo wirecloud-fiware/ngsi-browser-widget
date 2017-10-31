@@ -2,6 +2,7 @@
 
 - Migrate to use NGSI v2, dropping support for v1.
 - Proper support for creating and updating context broker entities.
+- Support for ordering by attributes.
 
 ## v1.1.0 (2016-12-12)
 
