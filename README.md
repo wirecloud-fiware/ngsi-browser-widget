@@ -1,4 +1,4 @@
-# NGSI Browser widget
+# NGSI Browser widget
 
 The NGSI Browser widget allows you to browser [Orion Context
 Broker](http://catalogue.fiware.org/enablers/publishsubscribe-context-broker-orion-context-broker)
