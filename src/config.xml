@@ -31,7 +31,7 @@
         <preference name="type_column" type="boolean" label="Display Entity Type" description="Display a column with the type of the entity" default="true"/>
         <preference name="allow_edit" type="boolean" label="Allow Edit" description="Allow users to edit entities" default="true"/>
         <preference name="allow_delete" type="boolean" label="Allow Delete" description="Allow users to remove entities" default="true"/>
-        <preference name="allow_use" type="boolean" label="Run button" description="Display a use button" default="true"/>
+        <preference name="allow_use" type="boolean" label="Run button" description="Display a use button to send entity data through the `selection` output endpoint. This button is not displayed if the endpoint is not connected." default="true"/>
         <preference name="extra_attributes" type="text" label="Extra Attributes" description="Comma separated list of attributes to be displayed in the widget as extra columns" default=""/>
     </preferences>
 

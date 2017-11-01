@@ -41,6 +41,13 @@
         }.bind(this));
 
         /* Wiring */
+        mp.wiring.registerStatusCallback(() => {
+            var new_allow_use = mp.prefs.get('allow_use') && mp.widget.outputs.selection.connected;
+            if (new_allow_use !== this.allow_use) {
+                createTable.call(this);
+            }
+        });
+
         mp.wiring.registerCallback("filter-by-type", function (type_info) {
             if (typeof type_info === "string") {
                 try {
@@ -255,7 +262,8 @@
             }
         }
 
-        if (mp.prefs.get('allow_delete') || mp.prefs.get('allow_use')) {
+        this.allow_use = mp.prefs.get('allow_use') && mp.widget.outputs.selection.connected;
+        if (mp.prefs.get('allow_edit') || mp.prefs.get('allow_delete') || this.allow_use) {
             fields.push({
                 label: 'Actions',
                 width: '120px',
@@ -289,7 +297,7 @@
                         content.appendChild(button);
                     }
 
-                    if (mp.prefs.get('allow_use')) {
+                    if (this.allow_use) {
                         button = new se.Button({'class': 'btn-primary', 'iconClass': 'icon-play', 'title': 'Use'});
                         button.addEventListener("click", function () {
                             mp.wiring.pushEvent('selection', JSON.stringify(entry));

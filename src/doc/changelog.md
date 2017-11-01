@@ -3,6 +3,8 @@
 - Migrate to use NGSI v2, dropping support for v1.
 - Proper support for creating and updating context broker entities.
 - Support for ordering by attributes.
+- Only display the use button for entities if the selection output endpoint is
+  connected.
 
 ## v1.1.0 (2016-12-12)
 

@@ -44,6 +44,12 @@ Settings
   filtering entities from the Orion Context broker. This field cannot be empty.
 - **Id pattern:** Id pattern for filtering entities. This preference can be
   empty, in that case, entities won't be filtered by id.
+- **Display Entity Type:** Display a column with the type of the entity.
+- **Allow Edit:** Allow users to edit entities.
+- **Allow Delete:** Allow users to remove entities.
+- **Run button:** Display a use button to send entity data through the
+  `selection` output endpoint. This button is not displayed if the endpoint is
+  not connected.
 - **Extra Attributes:** Comma separated list of attributes to be displayed in
   the widget as extra columns.
 
