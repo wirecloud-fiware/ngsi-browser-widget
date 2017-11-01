@@ -1,10 +1,10 @@
-## v2.0
+## v2.0.0 (2017-11-01)
 
-- Migrate to use NGSI v2, dropping support for v1.
-- Proper support for creating and updating context broker entities.
-- Support for ordering by attributes.
+- Migrate to use NGSI v2, dropping support for v1
+- Proper support for creating and updating context broker entities
+- Support for ordering entities by attributes values
 - Only display the use button for entities if the selection output endpoint is
-  connected.
+  connected
 
 ## v1.1.0 (2016-12-12)
 
