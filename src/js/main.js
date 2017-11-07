@@ -110,11 +110,11 @@
             request_headers: {},
             use_user_fiware_token: mp.prefs.get('use_user_fiware_token')
         };
-        var tenant = mp.prefs.get('ngsi_tenant').trim().toLowerCase();
+        var tenant = mp.prefs.get('ngsi_tenant').trim();
         if (tenant !== '') {
             options.request_headers['FIWARE-Service'] = tenant;
         }
-        var path = mp.prefs.get('ngsi_service_path').trim().toLowerCase();
+        var path = mp.prefs.get('ngsi_service_path').trim();
         if (path !== '' && path !== '/') {
             options.request_headers['FIWARE-ServicePath'] = path;
         }

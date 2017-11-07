@@ -1,3 +1,8 @@
+## v2.0.1 (2017-11-xx)
+
+- Use case sensitive `FIWARE-Service` and `FIWARE-ServicePath` values to fix
+  some problems
+
 ## v2.0.0 (2017-11-01)
 
 - Migrate to use NGSI v2, dropping support for v1
