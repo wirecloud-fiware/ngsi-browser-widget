@@ -88,7 +88,7 @@
 
         this.create_entity_button = new se.Button({
             class: "se-btn-circle add-entity-button z-depth-3",
-            iconClass: "icon-plus",
+            iconClass: "fa fa-plus",
         });
 
         this.editor_config_output = mp.widget.createOutputEndpoint();
@@ -282,7 +282,7 @@
                     }
 
                     if (mp.prefs.get('allow_delete')) {
-                        button = new se.Button({'class': 'btn-danger', 'iconClass': 'icon-trash', 'title': 'Delete'});
+                        button = new se.Button({'class': 'btn-danger', 'iconClass': 'fa fa-trash', 'title': 'Delete'});
                         button.addEventListener("click", function () {
                             this.ngsi_connection.v2.deleteEntity({
                                 id: entry.id,
@@ -298,7 +298,7 @@
                     }
 
                     if (this.allow_use) {
-                        button = new se.Button({'class': 'btn-primary', 'iconClass': 'icon-play', 'title': 'Use'});
+                        button = new se.Button({'class': 'btn-primary', 'iconClass': 'fa fa-play', 'title': 'Use'});
                         button.addEventListener("click", function () {
                             mp.wiring.pushEvent('selection', JSON.stringify(entry));
                         }.bind(this));

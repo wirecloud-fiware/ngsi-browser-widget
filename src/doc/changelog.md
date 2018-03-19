@@ -1,5 +1,6 @@
 ## v2.0.1 (2017-11-xx)
 
+- Upgrade to use FontAwesome 4
 - Use case sensitive `FIWARE-Service` and `FIWARE-ServicePath` values to fix
   some problems
 
