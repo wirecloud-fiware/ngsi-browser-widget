@@ -164,7 +164,7 @@
 
     var onUpdateEntity = function onUpdateEntity(data_string) {
         var data = JSON.parse(data_string);
-        this.ngsi_connection.v2.replaceEntityAttributes(data, {keyValues: true}).then(() => {
+        this.ngsi_connection.v2.replaceEntityAttributes(data).then(() => {
             this.ngsi_source.refresh();
             if (this.editor_widget != null) {
                 this.editor_widget.remove();
@@ -174,7 +174,7 @@
 
     var onCreateEntity = function onCreateEntity(data_string) {
         var data = JSON.parse(data_string);
-        this.ngsi_connection.v2.createEntity(data, {keyValues: true}).then(() => {
+        this.ngsi_connection.v2.createEntity(data).then(() => {
             this.ngsi_source.refresh();
             if (this.editor_widget != null) {
                 this.editor_widget.remove();
@@ -209,13 +209,12 @@
                         }
                     }
                     if (options.order && options.order.length > 0) {
-                        orderBy = options.order.map((field) => {return field.replace(/^-/, "!");}).join(',');
+                        orderBy = options.order.map((field) => {return field[0].replace(/^-/, "!");}).join(',');
                     }
 
                     this.ngsi_connection.v2.listEntities({
                         count: true,
                         idPattern: id_pattern,
-                        keyValues: true,
                         limit: options.pageSize,
                         offset: (page - 1) * options.pageSize,
                         type: types,
@@ -235,12 +234,12 @@
                 }
             }.bind(this)
         });
-        this.ngsi_source.addEventListener('requestStart', function () {
+        this.ngsi_source.addEventListener('requestStart', () => {
             this.layout.center.disable();
-        }.bind(this));
-        this.ngsi_source.addEventListener('requestEnd', function () {
+        });
+        this.ngsi_source.addEventListener('requestEnd', () => {
             this.layout.center.enable();
-        }.bind(this));
+        });
     };
 
     var createTable = function createTable() {
@@ -258,7 +257,7 @@
         if (extra_attributes !== "") {
             extra_attributes = extra_attributes.split(new RegExp(',\\s*'));
             for (i = 0; i < extra_attributes.length; i++) {
-                fields.push({field: extra_attributes[i], sortable: true});
+                fields.push({label: extra_attributes[i], field: [extra_attributes[i], 'value'], sortable: true});
             }
         }
 
