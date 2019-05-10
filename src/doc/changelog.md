@@ -1,8 +1,15 @@
+## v3.0.0 (2019-05-XX)
+
+- Use normalized payloads for entities, allowing to update attribute type and
+  its metadata.
+
+
 ## v2.0.1 (2018-03-20)
 
 - Upgrade to use FontAwesome 4
 - Use case sensitive `FIWARE-Service` and `FIWARE-ServicePath` values to fix
   some problems
+
 
 ## v2.0.0 (2017-11-01)
 
@@ -11,6 +18,7 @@
 - Support for ordering entities by attribute values
 - Only display the use button for entities if the selection output endpoint is
   connected
+
 
 ## v1.1.0 (2016-12-12)
 
