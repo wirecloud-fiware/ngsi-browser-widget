@@ -2,6 +2,8 @@
 
 - Use normalized payloads for entities, allowing to update attribute type and
   its metadata.
+- Allow to order entities by id or type (requires support from the ontext broker
+    server, e.g. orion v0.12.0 or higher)
 
 
 ## v2.0.1 (2018-03-20)

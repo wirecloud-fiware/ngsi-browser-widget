@@ -209,7 +209,7 @@
                         }
                     }
                     if (options.order && options.order.length > 0) {
-                        orderBy = options.order.map((field) => {return field[0].replace(/^-/, "!");}).join(',');
+                        orderBy = options.order.map((field) => {return field.replace(/^-/, "!");}).join(',');
                     }
 
                     this.ngsi_connection.v2.listEntities({
@@ -247,17 +247,17 @@
 
         // Create the table
         fields = [
-            {field: 'id', label: 'Id', sortable: false}
+            {field: 'id', label: 'Id', sortable: true}
         ];
         if (mp.prefs.get('type_column')) {
-            fields.push({field: 'type', label: 'Type', sortable: false});
+            fields.push({field: 'type', label: 'Type', sortable: true});
         }
 
         extra_attributes = mp.prefs.get('extra_attributes').trim();
         if (extra_attributes !== "") {
             extra_attributes = extra_attributes.split(new RegExp(',\\s*'));
             for (i = 0; i < extra_attributes.length; i++) {
-                fields.push({label: extra_attributes[i], field: [extra_attributes[i], 'value'], sortable: true});
+                fields.push({label: extra_attributes[i], sort_id: extra_attributes[i], field: [extra_attributes[i], 'value'], sortable: true});
             }
         }
 
