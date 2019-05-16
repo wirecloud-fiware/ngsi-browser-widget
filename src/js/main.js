@@ -34,7 +34,7 @@
             if ('ngsi_server' in newValues || 'use_user_fiware_token' in newValues || 'use_owner_credentials' in newValues || 'ngsi_tenant' in newValues || 'ngsi_service_path' in newValues) {
                 this.updateNGSIConnection();
             }
-            if ('extra_attributes' in newValues || 'type_column' in newValues || 'allow_delete' in newValues || 'allow_use') {
+            if ('extra_attributes' in newValues || 'type_column' in newValues || 'allow_delete' in newValues || 'allow_use' in newValues) {
                 createTable.call(this);
             }
             this.ngsi_source.goToFirst();
