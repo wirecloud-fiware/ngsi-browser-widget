@@ -34,7 +34,7 @@
             if ('ngsi_server' in newValues || 'use_user_fiware_token' in newValues || 'use_owner_credentials' in newValues || 'ngsi_tenant' in newValues || 'ngsi_service_path' in newValues) {
                 this.updateNGSIConnection();
             }
-            if ('extra_attributes' in newValues || 'type_column' in newValues || 'allow_delete' in newValues || 'allow_use' in newValues) {
+            if ('extra_attributes' in newValues || 'type_column' in newValues || 'allow_delete' in newValues || 'allow_use' in newValues || 'subscription_notices' in newValues) {
                 createTable.call(this);
             }
             this.ngsi_source.goToFirst();
@@ -115,13 +115,25 @@
             options.request_headers['FIWARE-Service'] = tenant;
         }
         var path = mp.prefs.get('ngsi_service_path').trim();
-        if (path !== '' && path !== '/') {
+        if (path !== '') {
             options.request_headers['FIWARE-ServicePath'] = path;
         }
 
         this.ngsi_connection = new NGSI.Connection(this.ngsi_server, options);
     };
 
+    NGSIBrowser.prototype.subscribeNGSIChanges = function subscribeNGSIChanges(subscriptionJSON) {
+
+        this.ngsi_connection.v2.createSubscription(subscriptionJSON).then(
+            resp => {
+                mp.widget.log("Subscription successfully created " + resp.subscription.id, mp.log.INFO);
+                mp.wiring.pushEvent('subscription', resp.subscription);
+            },
+            error => {
+                mp.widget.log("Error connecting to CB for subscription creation " + error, mp.log.ERROR);
+            }
+        );
+    };
     /* *************************************************************************/
     /* ***************************** HANDLERS **********************************/
     /* *************************************************************************/
@@ -262,7 +274,8 @@
         }
 
         this.allow_use = mp.prefs.get('allow_use') && mp.widget.outputs.selection.connected;
-        if (mp.prefs.get('allow_edit') || mp.prefs.get('allow_delete') || this.allow_use) {
+        this.allow_subscription = mp.prefs.get('subscription_notices') != "";
+        if (mp.prefs.get('allow_edit') || mp.prefs.get('allow_delete') || this.allow_subscription || this.allow_use) {
             fields.push({
                 label: 'Actions',
                 width: '120px',
@@ -304,6 +317,25 @@
                         content.appendChild(button);
                     }
 
+                    if (this.allow_subscription) {
+                        button = new se.PopupButton({'class': 'btn-light', 'iconClass': 'fa fa-ellipsis-v', 'title': 'Subscribe'});
+                        button.popup_menu.append(new StyledElements.MenuItem("subscribe to changes in '" + entry.id + "'", null, "entityChanges"));
+                        button.popup_menu.append(new StyledElements.MenuItem("subscribe to all '" + entry.type + "' entities", null, "typeChanges"));
+                        button.popup_menu.on("click", function (menu, item) {
+                            emptySubscription.notification.http.url = mp.prefs.get('subscription_notices');
+                            emptySubscription.subject.entities[0].type = entry.type;
+                            if (item.context === "entityChanges") {
+                                emptySubscription.subject.entities[0].idPattern = entry.id;
+                                emptySubscription.description = "Perseo: Notify when " + entry.id + " entity changes";
+                            } else if (item.context === "typeChanges") {
+                                emptySubscription.subject.entities[0].idPattern = ".*";
+                                emptySubscription.description = "Perseo: Notify when any entity with " + entry.type + " type changes";
+                            }
+                            this.subscribeNGSIChanges(emptySubscription);
+                        }.bind(this));
+                        content.appendChild(button);
+                    }
+
                     return content;
                 }.bind(this),
                 sortable: false
@@ -315,6 +347,27 @@
         this.table.reload();
         this.layout.center.clear();
         this.layout.center.appendChild(this.table);
+    };
+
+    var emptySubscription = {
+        "description": "ChangeMe_Desc",
+        "subject": {
+            "entities": [
+                {
+                    "idPattern": "ChangeMe_ID",
+                    "type": "ChangeMe_Type"
+                }
+            ],
+            "condition": {
+                "attrs": []
+            }
+        },
+        "notification": {
+            "http": {
+                "url": "ChangeMe_URL"
+            },
+            "attrs": []
+        }
     };
 
     var widget = new NGSIBrowser();
