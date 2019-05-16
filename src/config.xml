@@ -4,9 +4,9 @@
         <title>NGSI browser</title>
         <email>wirecloud@conwet.com</email>
         <image>images/catalogue.png</image>
-        <description>Browse available entities on a given Orio context broker server</description>
+        <description>Browse available entities on a given Orion context broker server</description>
         <longdescription>DESCRIPTION.md</longdescription>
-        <authors>Álvaro Arranz García &lt;aarranz@conwet.com&gt;</authors>
+        <authors>Álvaro Arranz García &lt;aarranz@conwet.com>, Carlos Blanco Vallejo &lt;cblanco@ficodes.com></authors>
         <homepage>https://github.com/wirecloud-fiware/ngsi-browser-widget</homepage>
         <license>Apache License 2.0</license>
         <licenseurl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseurl>
