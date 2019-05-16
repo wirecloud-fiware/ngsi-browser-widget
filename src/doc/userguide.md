@@ -53,7 +53,8 @@ Settings
 - **Extra Attributes:** Comma separated list of attributes to be displayed in
   the widget as extra columns.
 - **Perseo URL:** he URL to which Context Broker notifications will be sent
-  when a subscription is created.
+  when a subscription is created. If this field is empty the subscription
+  function will not be available.
 
 ### Wiring
 
