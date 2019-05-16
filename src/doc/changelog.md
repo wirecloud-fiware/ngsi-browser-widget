@@ -1,3 +1,8 @@
+## v3.0.1 (2019-05-16)
+
+- New Subscription feature
+- New output endpoint for subscriptions
+
 ## v3.0.0 (2019-05-XX)
 
 - Use normalized payloads for entities, allowing to update attribute type and
