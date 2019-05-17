@@ -76,7 +76,7 @@ Settings
     }
     ```
 -   **subscription:** This widget sends an event thought this endpoint when
-    the user clicks on any option of the "Subscription menú Popup Button".
+    the user clicks on any option of the "Subscription menu Popup Button".
     Event data example:
 
     ```json
