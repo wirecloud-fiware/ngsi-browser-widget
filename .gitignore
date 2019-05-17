@@ -6,3 +6,4 @@ build/
 _SpecRunner.html
 src/js/.tern-port
 .DS_Store
+.idea

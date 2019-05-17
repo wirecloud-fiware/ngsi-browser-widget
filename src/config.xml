@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="CoNWeT" name="ngsi-browser" version="3.0.0a2">
+<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="CoNWeT" name="ngsi-browser" version="3.0.0a3">
     <details>
         <title>NGSI browser</title>
         <email>wirecloud@conwet.com</email>
         <image>images/catalogue.png</image>
-        <description>Browse available entities on a given Orio context broker server</description>
+        <description>Browse available entities on a given Orion context broker server</description>
         <longdescription>DESCRIPTION.md</longdescription>
-        <authors>Álvaro Arranz García &lt;aarranz@conwet.com&gt;</authors>
+        <authors>Álvaro Arranz García &lt;aarranz@conwet.com>, Carlos Blanco Vallejo &lt;cblanco@ficodes.com></authors>
         <homepage>https://github.com/wirecloud-fiware/ngsi-browser-widget</homepage>
         <license>Apache License 2.0</license>
         <licenseurl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseurl>
@@ -33,11 +33,13 @@
         <preference name="allow_delete" type="boolean" label="Allow Delete" description="Allow users to remove entities" default="true"/>
         <preference name="allow_use" type="boolean" label="Run button" description="Display a use button to send entity data through the `selection` output endpoint. This button is not displayed if the endpoint is not connected." default="true"/>
         <preference name="extra_attributes" type="text" label="Extra Attributes" description="Comma separated list of attributes to be displayed in the widget as extra columns" default=""/>
+        <preference name="subscription_notices" type="text" label="Perseo URL" description="URL for subscription notifications (if this field is empty the subscriptions button disappears)" default=""/>
     </preferences>
 
     <wiring>
         <inputendpoint name="filter-by-type" label="Filter by Type" type="text" friendcode="ngsi-type-info" />
         <outputendpoint name="selection" label="Selection" type="text"/>
+        <outputendpoint name="subscription" label="subscription" type="text"/>
     </wiring>
 
     <contents src="index.html" useplatformstyle="true"/>

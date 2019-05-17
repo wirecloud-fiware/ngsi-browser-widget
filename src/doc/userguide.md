@@ -52,6 +52,9 @@ Settings
   not connected.
 - **Extra Attributes:** Comma separated list of attributes to be displayed in
   the widget as extra columns.
+- **Perseo URL:** he URL to which Context Broker notifications will be sent
+  when a subscription is created. If this field is empty the subscription
+  function will not be available.
 
 ### Wiring
 
@@ -70,5 +73,32 @@ Settings
         "id": "van4",
         "type": "Van",
         "current_position": "43.47173, -3.7967205"
+    }
+    ```
+-   **subscription:** This widget sends an event thought this endpoint when
+    the user clicks on any option of the "Subscription menu Popup Button".
+    Event data example:
+
+    ```json
+    {
+       "description":"Perseo: Notify when FEDA5A0E entity changes",
+       "subject":{
+          "entities":[
+             {
+                "idPattern":"FEDA5A0E",
+                "type":"SensorType"
+             }
+          ],
+          "condition":{
+             "attrs":[]
+          }
+       },
+       "notification":{
+          "http":{
+             "url":"https://cep.example.com/notices"
+          },
+          "attrs":[]
+       },
+       "id":"5cdda832775bff91aa1c4472"
     }
     ```
