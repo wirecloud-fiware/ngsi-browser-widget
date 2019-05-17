@@ -1,14 +1,11 @@
-## v3.0.1 (2019-05-16)
-
-- New Subscription feature
-- New output endpoint for subscriptions
-
 ## v3.0.0 (2019-05-XX)
 
 - Use normalized payloads for entities, allowing to update attribute type and
   its metadata.
 - Allow to order entities by id or type (requires support from the ontext broker
     server, e.g. orion v0.12.0 or higher)
+- New Subscription feature
+- New output endpoint for subscriptions
 
 
 ## v2.0.1 (2018-03-20)
