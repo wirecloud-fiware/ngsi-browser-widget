@@ -3,9 +3,11 @@
 - Use normalized payloads for entities, allowing to update attribute type and
   its metadata.
 - Allow to order entities by id or type (requires support from the ontext broker
-    server, e.g. orion v0.12.0 or higher)
-- New Subscription feature
-- New output endpoint for subscriptions
+  server, e.g. orion v0.12.0 or higher)
+- Added support for creating subscriptions on the browsed entities. Currently
+  the support focus on creating subscriptions related to Perseo.
+- Added a new output endpoint for notifiying when a subscriptions was created.
+- Support uploading entities using files.
 
 
 ## v2.0.1 (2018-03-20)
