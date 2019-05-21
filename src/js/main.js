@@ -87,6 +87,10 @@
         this.layout.insertInto(document.body);
         this.layout.repaint();
 
+        this.buttonwrapper = document.createElement("div");
+        this.buttonwrapper.className = "generalbuttons";
+        document.body.appendChild(this.buttonwrapper);
+
         this.editor_config_output = mp.widget.createOutputEndpoint();
         this.template_output = mp.widget.createOutputEndpoint();
         this.update_entity_endpoint = mp.widget.createInputEndpoint(onUpdateEntity.bind(this));
@@ -102,7 +106,7 @@
                 this.processFile(files[i]);
             }
         });
-        this.layout.center.appendChild(this.upload_entities_button);
+        this.upload_entities_button.insertInto(this.buttonwrapper);
 
         this.create_entity_button = new se.Button({
             class: "se-btn-circle add-entity-button z-depth-3",
@@ -112,7 +116,7 @@
             openEditorWidget.call(this, button, "create");
             this.template_output.pushEvent('{"id": "", "type": ""}');
         }.bind(this));
-        this.layout.center.appendChild(this.create_entity_button);
+        this.create_entity_button.insertInto(this.buttonwrapper);
     };
 
     NGSIBrowser.prototype.updateNGSIConnection = function updateNGSIConnection() {
