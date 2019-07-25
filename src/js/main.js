@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2015-2017 CoNWeT Lab., Universidad Politécnica de Madrid
+ * Copyright (c) 2019 Future Internet Consulting and Development Solutions S.L.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -86,21 +87,36 @@
         this.layout.insertInto(document.body);
         this.layout.repaint();
 
-        this.create_entity_button = new se.Button({
-            class: "se-btn-circle add-entity-button z-depth-3",
-            iconClass: "fa fa-plus",
-        });
+        this.buttonwrapper = document.createElement("div");
+        this.buttonwrapper.className = "generalbuttons";
+        document.body.appendChild(this.buttonwrapper);
 
         this.editor_config_output = mp.widget.createOutputEndpoint();
         this.template_output = mp.widget.createOutputEndpoint();
         this.update_entity_endpoint = mp.widget.createInputEndpoint(onUpdateEntity.bind(this));
         this.create_entity_endpoint = mp.widget.createInputEndpoint(onCreateEntity.bind(this));
+
+        this.upload_entities_button = new se.FileButton({
+            class: "se-btn-circle upload-entities-button z-depth-3",
+            iconClass: "fa fa-upload",
+        });
+        this.upload_entities_button.addEventListener('fileselect', (button, files) => {
+            // forEach is not available on FileList
+            for (var i = 0; i < files.length; i++) {
+                this.processFile(files[i]);
+            }
+        });
+        this.upload_entities_button.insertInto(this.buttonwrapper);
+
+        this.create_entity_button = new se.Button({
+            class: "se-btn-circle add-entity-button z-depth-3",
+            iconClass: "fa fa-plus",
+        });
         this.create_entity_button.addEventListener('click', function (button) {
             openEditorWidget.call(this, button, "create");
             this.template_output.pushEvent('{"id": "", "type": ""}');
         }.bind(this));
-
-        this.layout.center.appendChild(this.create_entity_button);
+        this.create_entity_button.insertInto(this.buttonwrapper);
     };
 
     NGSIBrowser.prototype.updateNGSIConnection = function updateNGSIConnection() {
@@ -123,7 +139,6 @@
     };
 
     NGSIBrowser.prototype.subscribeNGSIChanges = function subscribeNGSIChanges(subscriptionJSON) {
-
         this.ngsi_connection.v2.createSubscription(subscriptionJSON).then(
             resp => {
                 mp.widget.log("Subscription successfully created " + resp.subscription.id, mp.log.INFO);
@@ -134,6 +149,50 @@
             }
         );
     };
+
+    NGSIBrowser.prototype.uploadEntities = function uploadEntities(entities) {
+        let task;
+
+        if (Array.isArray(entities)) {
+            // Entity collection
+            var requests = [];
+            for (var i = 0; i < entities.length; i += 100) {
+                let chunk = entities.slice(i, i + 100);
+                requests.push(this.ngsi_connection.v2.batchUpdate({
+                    actionType: "APPEND",
+                    entities: chunk
+                }));
+            }
+
+            task = Promise.all(requests)
+        } else if (entities != null && typeof entities === "object") {
+            // Single entity
+            task = this.ngsi_connection.v2.createEntity(entities);
+        }
+
+        task.then(
+            () => {
+                this.ngsi_source.refresh();
+            },
+            () => {
+            }
+        );
+    };
+
+    NGSIBrowser.prototype.processFile = function processFile(file) {
+        var reader = new FileReader();
+        reader.onload = (event) => {
+            try {
+                var data = JSON.parse(event.target.result);
+            } catch (e) {
+                MashupPlatform.widget.log(e);
+            }
+            this.uploadEntities(data);
+        };
+        reader.readAsText(file);
+    };
+
+
     /* *************************************************************************/
     /* ***************************** HANDLERS **********************************/
     /* *************************************************************************/

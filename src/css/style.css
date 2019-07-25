@@ -1,9 +1,4 @@
-#messageContainer{
-    margin-top:36px;
-    position:absolute;
-}
-
-.add-entity-button {
+.generalbuttons {
     position: absolute;
     bottom: 10px;
     right: 10px;
