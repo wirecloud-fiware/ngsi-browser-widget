@@ -1,7 +1,7 @@
 {
   "description": "This package.json file is only used for installing npm dependencies. But this is not an installable node package, but a WireCloud operator. Take a look into src/config.xml for more details about this widget",
   "devDependencies": {
-    "grunt": "^1.0.3",
+    "grunt": "^1.5.3",
     "grunt-bower-task": "^0.5.0",
     "grunt-contrib-clean": "^1.1.0",
     "grunt-contrib-compress": "^1.5.0",
